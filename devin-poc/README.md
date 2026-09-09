@@ -27,6 +27,11 @@ stored in the repo.
 | `FINERACT_ADMIN_PASSWORD` | Built-in superuser `mifos` (Fineract ships with `password`; `seed.sh` rotates it to this value) |
 | `POC_MAKER_PASSWORD` / `POC_CHECKER_PASSWORD` | `poc_maker` / `poc_checker` users created by `seed.sh` |
 
+`seed.sh` switches the active password validation policy to policy id `2` (the
+policy requiring at least six characters with upper-case, lower-case, and a
+digit) before rotating or creating passwords; this matches the PoC secrets
+without requiring special characters.
+
 ## Build the image
 
 ```bash

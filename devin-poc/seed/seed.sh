@@ -9,8 +9,8 @@ OUT_DIR="$SCRIPT_DIR/out"
 IDS_FILE="$OUT_DIR/ids.env"
 mkdir -p "$OUT_DIR"
 
-ensure_admin_password
 wait_for_health
+ensure_admin_password
 
 json_id() {
     jq -r '.resourceId // .clientId // .savingsId // .id // empty'
@@ -187,9 +187,6 @@ ensure_savings_account() {
     fi
     printf '%s' "$savings_id"
 }
-
-echo "Waiting for Fineract health..."
-wait_for_health
 
 configurations=$(api GET /configurations)
 maker_checker_config_id=$(jq -r '.globalConfiguration | [.[] | select(.name == "maker-checker")][0].id // empty' <<<"$configurations")

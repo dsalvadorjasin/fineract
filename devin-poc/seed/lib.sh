@@ -61,6 +61,15 @@ wait_for_health() {
     return 1
 }
 
+ensure_password_policy() {
+    local preferences policy_id
+    preferences=$(api GET /passwordpreferences)
+    policy_id=$(jq -r '.id // empty' <<<"$preferences")
+    if [[ "$policy_id" != "2" ]]; then
+        api PUT /passwordpreferences '{"validationPolicyId":2}' >/dev/null
+    fi
+}
+
 ensure_admin_password() {
     : "${FINERACT_ADMIN_PASSWORD:?FINERACT_ADMIN_PASSWORD must be set}"
 
@@ -70,6 +79,7 @@ ensure_admin_password() {
 
     if [[ "$status" == "200" ]]; then
         AUTH_PASSWORD=$FINERACT_ADMIN_PASSWORD
+        ensure_password_policy
         return 0
     fi
 
@@ -80,6 +90,7 @@ ensure_admin_password() {
 
     AUTH_PASSWORD=password
     api POST /authentication '{"username":"mifos","password":"password"}' >/dev/null
+    ensure_password_policy
     api PUT /users/1 "{\"password\":$(jq -Rn --arg value "$FINERACT_ADMIN_PASSWORD" '$value'),\"repeatPassword\":$(jq -Rn --arg value "$FINERACT_ADMIN_PASSWORD" '$value')}" >/dev/null
     AUTH_PASSWORD=$FINERACT_ADMIN_PASSWORD
 }
