@@ -26,6 +26,9 @@ initialize:
     run: |
       docker pull postgres:18.3
       docker pull openmf/web-app@sha256:0d2a9ccbdf5dea6e9975f17598a0d47b87842a692e0aa8b459e3cda94a1dd729
+  - name: Playwright Chromium
+    run: |
+      cd devin-poc/playwright && npm ci && npx playwright install --with-deps chromium
 maintenance:
   - name: build fineract:latest with Jib (warms ~/.gradle; retried once for Maven Central 429s)
     run: |
