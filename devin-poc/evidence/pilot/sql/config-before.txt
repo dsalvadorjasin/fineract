@@ -1,0 +1,5 @@
+ id |                 name                 | enabled | value 
+----+--------------------------------------+---------+-------
+ 76 | max-single-withdrawal-amount-savings | f       |      
+(1 row)
+

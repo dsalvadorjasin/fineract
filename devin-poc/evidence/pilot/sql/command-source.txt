@@ -1,0 +1,10 @@
+ id | action_name |  entity_name   | status | result_status_code | made_on_date | checked_on_date 
+----+-------------+----------------+--------+--------------------+--------------+-----------------
+ 26 | DEPOSIT     | SAVINGSACCOUNT |      1 |                200 |              | 
+ 25 | WITHDRAWAL  | SAVINGSACCOUNT |      5 |                403 |              | 
+ 24 | WITHDRAWAL  | SAVINGSACCOUNT |      1 |                200 |              | 
+ 23 | UPDATE      | CONFIGURATION  |      1 |                200 |              | 
+ 22 | DEPOSIT     | SAVINGSACCOUNT |      1 |                200 |              | 
+ 21 | ACTIVATE    | SAVINGSACCOUNT |      1 |                200 |              | 
+(6 rows)
+

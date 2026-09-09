@@ -1,0 +1,41 @@
+=== Savings account summary ===
+ id | account_no | status_enum | account_balance_derived 
+----+------------+-------------+-------------------------
+  1 | 000000001  |         300 |             9900.000000
+(1 row)
+
+=== Savings account transactions ===
+ id | transaction_type_enum |    amount    | transaction_date | is_reversed 
+----+-----------------------+--------------+------------------+-------------
+  1 |                     1 | 10000.000000 | 2026-09-09       | f
+  3 |                     2 |   100.000000 | 2026-09-09       | f
+(2 rows)
+
+=== Journal entries for savings account ===
+ id | entry_date | gl_code  |        name         | entry_type | type_enum |    amount    
+----+------------+----------+---------------------+------------+-----------+--------------
+  1 | 2026-09-09 | POC-1001 | POC Cash            | DEBIT      |         2 | 10000.000000
+  2 | 2026-09-09 | POC-2001 | POC Savings Control | CREDIT     |         1 | 10000.000000
+  5 | 2026-09-09 | POC-2001 | POC Savings Control | DEBIT      |         2 |   100.000000
+  6 | 2026-09-09 | POC-1001 | POC Cash            | CREDIT     |         1 |   100.000000
+(4 rows)
+
+=== Debit and credit totals ===
+ debit_total  | credit_total | balanced 
+--------------+--------------+----------
+ 10100.000000 | 10100.000000 | t
+(1 row)
+
+=== Pending maker-checker commands ===
+ id | action_name | entity_name | processing_result_enum | made_on_date_utc 
+----+-------------+-------------+------------------------+------------------
+(0 rows)
+
+=== Relevant configuration ===
+ id |                 name                 | enabled | value 
+----+--------------------------------------+---------+-------
+  1 | maker-checker                        | t       |      
+ 58 | enable-same-maker-checker            | f       |      
+ 76 | max-single-withdrawal-amount-savings | t       |   500
+(3 rows)
+
