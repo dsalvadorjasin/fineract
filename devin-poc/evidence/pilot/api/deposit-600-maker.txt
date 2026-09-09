@@ -1,0 +1,6 @@
+POST /savingsaccounts/1/transactions?command=deposit
+HTTP status: 200
+Request body:
+{"transactionAmount":600,"paymentTypeId":1,"transactionDate":"09 September 2026","dateFormat":"dd MMMM yyyy","locale":"en"}
+Response body:
+{"officeId":1,"clientId":1,"savingsId":1,"resourceId":4,"changes":{"paymentTypeId":1}}

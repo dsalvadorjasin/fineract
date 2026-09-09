@@ -76,6 +76,7 @@ import org.apache.fineract.portfolio.savings.domain.SavingsAccountRepositoryWrap
 import org.apache.fineract.portfolio.savings.domain.SavingsAccountTransaction;
 import org.apache.fineract.portfolio.savings.domain.SavingsAccountTransactionRepository;
 import org.apache.fineract.portfolio.savings.exception.SavingsAccountTransactionNotFoundException;
+import org.apache.fineract.portfolio.savings.exception.SavingsAccountWithdrawalExceedsMaxSingleAmountException;
 import org.apache.fineract.useradministration.domain.AppUser;
 import org.apache.fineract.useradministration.domain.AppUserRepositoryWrapper;
 import org.junit.jupiter.api.AfterEach;
@@ -156,12 +157,16 @@ class SavingsAccountWritePlatformServiceJpaRepositoryImplTest {
     private SavingsAccountWritePlatformServiceJpaRepositoryImpl service;
 
     private Method validateTransactionsForTransfer;
+    private Method validateMaxSingleWithdrawalAmount;
 
     @BeforeEach
     void setUp() throws Exception {
         validateTransactionsForTransfer = SavingsAccountWritePlatformServiceJpaRepositoryImpl.class
                 .getDeclaredMethod("validateTransactionsForTransfer", SavingsAccount.class, LocalDate.class);
         validateTransactionsForTransfer.setAccessible(true);
+        validateMaxSingleWithdrawalAmount = SavingsAccountWritePlatformServiceJpaRepositoryImpl.class
+                .getDeclaredMethod("validateMaxSingleWithdrawalAmount", BigDecimal.class);
+        validateMaxSingleWithdrawalAmount.setAccessible(true);
     }
 
     @AfterEach
@@ -480,5 +485,14 @@ class SavingsAccountWritePlatformServiceJpaRepositoryImplTest {
 
         // Then
         assertThat(result.getTransactionId()).isEqualTo(expectedTransactionId.toString());
+    }
+
+    @Test
+    void validateMaxSingleWithdrawalAmount_overLimit_throwsDomainRuleException() {
+        when(configurationDomainService.isMaxSingleWithdrawalAmountSavingsEnabled()).thenReturn(true);
+        when(configurationDomainService.retrieveMaxSingleWithdrawalAmountSavings()).thenReturn(500L);
+
+        assertThatThrownBy(() -> validateMaxSingleWithdrawalAmount.invoke(service, new BigDecimal("600")))
+                .isInstanceOf(InvocationTargetException.class).hasCauseInstanceOf(SavingsAccountWithdrawalExceedsMaxSingleAmountException.class);
     }
 }

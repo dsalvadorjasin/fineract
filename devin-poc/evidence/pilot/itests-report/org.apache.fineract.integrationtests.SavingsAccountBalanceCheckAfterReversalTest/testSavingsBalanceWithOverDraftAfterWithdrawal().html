@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - testSavingsBalanceWithOverDraftAfterWithdrawal()</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<div class="breadcrumbs">
+<a class="breadcrumb" href="../index.html">all</a> &gt; 
+<a class="breadcrumb" href="index.html">org.apache.fineract.integrationtests.SavingsAccountBalanceCheckAfterReversalTest</a> &gt; 
+<span class="breadcrumb">testSavingsBalanceWithOverDraftAfterWithdrawal()</span>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a class="failureGroup" href="#">Gradle Test Run :integration-tests:test</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Gradle Test Run :integration-tests:test</h2>
+<h1>testSavingsBalanceWithOverDraftAfterWithdrawal()</h1>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a class="" href="#">summary</a>
+</li>
+</ul>
+<div class="tab">
+<h2>summary</h2>
+<div>
+<div class="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox">
+<div class="counter">1</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox">
+<div class="counter">0</div>
+<p>skipped</p>
+</div>
+</td>
+<td>
+<div class="infoBox duration">
+<div class="counter">1.461s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox failures successRate">
+<div class="percent">0%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="result-details">
+<h3>Failure details</h3>
+<span class="code">
+<pre id="root-0-test-failure-testSavingsBalanceWithOverDraftAfterWithdrawal()">org.apache.fineract.client.feign.util.CallFailedRuntimeException: HTTP failed: status=403, request=http://localhost:8080/fineract-provider/api/v1/savingsaccounts/3/transactions?command=withdrawal, errorBody={&quot;developerMessage&quot;:&quot;Request was understood but caused a domain rule violation.&quot;,&quot;httpStatusCode&quot;:&quot;403&quot;,&quot;defaultUserMessage&quot;:&quot;Errors contain reason for domain rule violation.&quot;,&quot;userMessageGlobalisationCode&quot;:&quot;validation.msg.domain.rule.violation&quot;,&quot;errors&quot;:[{&quot;developerMessage&quot;:&quot;Withdrawal amount 1000 exceeds the maximum permitted single withdrawal of 500&quot;,&quot;defaultUserMessage&quot;:&quot;Withdrawal amount 1000 exceeds the maximum permitted single withdrawal of 500&quot;,&quot;userMessageGlobalisationCode&quot;:&quot;error.msg.savingsaccount.transaction.withdrawal.exceeds.max.single.amount&quot;,&quot;parameterName&quot;:&quot;id&quot;,&quot;args&quot;:[{&quot;value&quot;:1000},{&quot;value&quot;:500}]}]}
+	at org.apache.fineract.client.feign.util.FeignCalls.ok(FeignCalls.java:46)
+	at org.apache.fineract.integrationtests.client.feign.helpers.FeignSavingsTransactionHelper.withdraw(FeignSavingsTransactionHelper.java:58)
+	at org.apache.fineract.integrationtests.client.feign.helpers.FeignSavingsTransactionHelper.withdraw(FeignSavingsTransactionHelper.java:62)
+	at org.apache.fineract.integrationtests.client.feign.FeignSavingsTestBase.withdraw(FeignSavingsTestBase.java:151)
+	at org.apache.fineract.integrationtests.SavingsAccountBalanceCheckAfterReversalTest.testSavingsBalanceWithOverDraftAfterWithdrawal(SavingsAccountBalanceCheckAfterReversalTest.java:67)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: org.apache.fineract.client.feign.FeignException: status 403 (Validation errors: [id] Withdrawal amount 1000 exceeds the maximum permitted single withdrawal of 500)
+	at org.apache.fineract.client.feign.FineractErrorDecoder.decode(FineractErrorDecoder.java:54)
+	at feign.InvocationContext.decodeError(InvocationContext.java:133)
+	at feign.InvocationContext.proceed(InvocationContext.java:80)
+	at feign.ResponseHandler.handleResponse(ResponseHandler.java:69)
+	at feign.SynchronousMethodHandler.executeAndDecode(SynchronousMethodHandler.java:109)
+	at feign.SynchronousMethodHandler.invoke(SynchronousMethodHandler.java:53)
+	at feign.ReflectiveFeign$FeignInvocationHandler.invoke(ReflectiveFeign.java:104)
+	at jdk.proxy3/jdk.proxy3.$Proxy37.createSavingsAccountTransaction(Unknown Source)
+	at org.apache.fineract.client.feign.services.SavingsAccountTransactionsApi.createSavingsAccountTransaction(SavingsAccountTransactionsApi.java:1102)
+	at java.base/java.lang.invoke.MethodHandle.invokeWithArguments(MethodHandle.java:735)
+	at feign.DefaultMethodHandler.invoke(DefaultMethodHandler.java:146)
+	at feign.ReflectiveFeign$FeignInvocationHandler.invoke(ReflectiveFeign.java:104)
+	at jdk.proxy3/jdk.proxy3.$Proxy37.createSavingsAccountTransaction(Unknown Source)
+	at org.apache.fineract.integrationtests.client.feign.helpers.FeignSavingsTransactionHelper.lambda$withdraw$0(FeignSavingsTransactionHelper.java:58)
+	at org.apache.fineract.client.feign.util.FeignCalls.ok(FeignCalls.java:44)
+	... 7 more
+Cause 1: org.apache.fineract.client.feign.FeignException: status 403 (Validation errors: [id] Withdrawal amount 1000 exceeds the maximum permitted single withdrawal of 500)
+	at app//org.apache.fineract.client.feign.FineractErrorDecoder.decode(FineractErrorDecoder.java:54)
+	at app//feign.InvocationContext.decodeError(InvocationContext.java:133)
+	at app//feign.InvocationContext.proceed(InvocationContext.java:80)
+	at app//feign.ResponseHandler.handleResponse(ResponseHandler.java:69)
+	at app//feign.SynchronousMethodHandler.executeAndDecode(SynchronousMethodHandler.java:109)
+	at app//feign.SynchronousMethodHandler.invoke(SynchronousMethodHandler.java:53)
+	at app//feign.ReflectiveFeign$FeignInvocationHandler.invoke(ReflectiveFeign.java:104)
+	at app/jdk.proxy3/jdk.proxy3.$Proxy37.createSavingsAccountTransaction(Unknown Source)
+	at app//org.apache.fineract.client.feign.services.SavingsAccountTransactionsApi.createSavingsAccountTransaction(SavingsAccountTransactionsApi.java:1102)
+	at java.base@25.0.4.1/java.lang.invoke.MethodHandle.invokeWithArguments(MethodHandle.java:735)
+	at app//feign.DefaultMethodHandler.invoke(DefaultMethodHandler.java:146)
+	at app//feign.ReflectiveFeign$FeignInvocationHandler.invoke(ReflectiveFeign.java:104)
+	at app/jdk.proxy3/jdk.proxy3.$Proxy37.createSavingsAccountTransaction(Unknown Source)
+	at app//org.apache.fineract.integrationtests.client.feign.helpers.FeignSavingsTransactionHelper.lambda$withdraw$0(FeignSavingsTransactionHelper.java:58)
+	at app//org.apache.fineract.client.feign.util.FeignCalls.ok(FeignCalls.java:44)
+	at app//org.apache.fineract.integrationtests.client.feign.helpers.FeignSavingsTransactionHelper.withdraw(FeignSavingsTransactionHelper.java:58)
+	at app//org.apache.fineract.integrationtests.client.feign.helpers.FeignSavingsTransactionHelper.withdraw(FeignSavingsTransactionHelper.java:62)
+	at app//org.apache.fineract.integrationtests.client.feign.FeignSavingsTestBase.withdraw(FeignSavingsTestBase.java:151)
+	at app//org.apache.fineract.integrationtests.SavingsAccountBalanceCheckAfterReversalTest.testSavingsBalanceWithOverDraftAfterWithdrawal(SavingsAccountBalanceCheckAfterReversalTest.java:67)
+	at java.base@25.0.4.1/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base@25.0.4.1/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base@25.0.4.1/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+</pre>
+<button class="clipboard-copy-btn" aria-label="Copy to clipboard" data-copy-element-id="root-0-test-failure-testSavingsBalanceWithOverDraftAfterWithdrawal()">Copy</button>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 9.7.1</a> at Sep 9, 2026, 1:02:21 PM</p>
+</div>
+</div>
+</body>
+</html>

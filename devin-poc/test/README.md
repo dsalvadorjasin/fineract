@@ -31,10 +31,12 @@ The default test classes are:
 
 - `org.apache.fineract.integrationtests.SavingsAccountTransactionTest`
 - `org.apache.fineract.integrationtests.SavingsAccountBalanceCheckAfterReversalTest`
+- `org.apache.fineract.integrationtests.SavingsMaxSingleWithdrawalTest`
 
 `ClientSavingsIntegrationTest` exists, but contains 45 tests and is a broad,
-slow suite rather than a targeted smoke set. Additional test filters are
-accepted and are added to the defaults:
+slow suite rather than a targeted smoke set. Supplying `--tests` filters
+replaces the defaults, which allows one focused class to run without the
+destructive default set:
 
 ```bash
 devin-poc/test/run-savings-itests.sh \

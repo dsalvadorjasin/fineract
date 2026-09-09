@@ -1,0 +1,4 @@
+PUT /configurations/76
+Tenant: default
+Request body:
+{"enabled":true,"value":500}

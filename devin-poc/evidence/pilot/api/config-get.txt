@@ -1,0 +1,4 @@
+GET /configurations/name/max-single-withdrawal-amount-savings
+HTTP status: 200
+Response body:
+{"name":"max-single-withdrawal-amount-savings","enabled":false,"id":76,"description":"When enabled, savings withdrawals (?command\u003dwithdrawal) whose amount exceeds the configured value (whole currency units) are rejected before maker-checker queueing; 0 or unset means no limit","trapDoor":false}

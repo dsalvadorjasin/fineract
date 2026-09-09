@@ -1,0 +1,22 @@
+=== Playwright run 1 ===
+
+Running 4 tests using 1 worker
+
+  ✓  1 [chromium] › maker-withdrawal.spec.ts:7:5 › maker submits a withdrawal for checker approval (4.5s)
+  ✓  2 [chromium] › checker-approve.spec.ts:7:5 › checker approves the pending withdrawal (3.8s)
+  ✓  3 [chromium] › checker-reject.spec.ts:7:5 › checker rejects a withdrawal (7.1s)
+  ✓  4 [chromium] › negative-max-withdrawal.spec.ts:18:5 › maximum withdrawal is rejected by the UI (5.1s)
+
+  4 passed (20.9s)
+Run 1 wall time: 00:00:22
+=== Playwright run 2 ===
+
+Running 4 tests using 1 worker
+
+  ✓  1 [chromium] › maker-withdrawal.spec.ts:7:5 › maker submits a withdrawal for checker approval (4.4s)
+  ✓  2 [chromium] › checker-approve.spec.ts:7:5 › checker approves the pending withdrawal (3.8s)
+  ✓  3 [chromium] › checker-reject.spec.ts:7:5 › checker rejects a withdrawal (7.0s)
+  ✓  4 [chromium] › negative-max-withdrawal.spec.ts:18:5 › maximum withdrawal is rejected by the UI (5.1s)
+
+  4 passed (20.8s)
+Run 2 wall time: 00:00:21

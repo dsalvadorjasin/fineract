@@ -1,0 +1,6 @@
+POST /savingsaccounts/1/transactions?command=withdrawal
+HTTP status: 403
+Request body:
+{"transactionAmount":600,"paymentTypeId":1,"transactionDate":"09 September 2026","dateFormat":"dd MMMM yyyy","locale":"en"}
+Response body:
+{"developerMessage":"Request was understood but caused a domain rule violation.","httpStatusCode":"403","defaultUserMessage":"Errors contain reason for domain rule violation.","userMessageGlobalisationCode":"validation.msg.domain.rule.violation","errors":[{"developerMessage":"Withdrawal amount 600 exceeds the maximum permitted single withdrawal of 500","defaultUserMessage":"Withdrawal amount 600 exceeds the maximum permitted single withdrawal of 500","userMessageGlobalisationCode":"error.msg.savingsaccount.transaction.withdrawal.exceeds.max.single.amount","parameterName":"id","args":[{"value":600},{"value":500}]}]}

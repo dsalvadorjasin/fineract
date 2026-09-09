@@ -1,0 +1,4 @@
+POST /makercheckers/24?command=approve
+HTTP status: 200
+Response body:
+{"officeId":1,"clientId":1,"savingsId":1,"resourceId":3,"changes":{"paymentTypeId":1}}

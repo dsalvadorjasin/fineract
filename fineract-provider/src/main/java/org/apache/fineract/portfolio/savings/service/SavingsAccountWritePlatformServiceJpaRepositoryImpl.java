@@ -123,6 +123,7 @@ import org.apache.fineract.portfolio.savings.exception.PostInterestAsOnDateExcep
 import org.apache.fineract.portfolio.savings.exception.PostInterestClosingDateException;
 import org.apache.fineract.portfolio.savings.exception.SavingsAccountClosingNotAllowedException;
 import org.apache.fineract.portfolio.savings.exception.SavingsAccountTransactionNotFoundException;
+import org.apache.fineract.portfolio.savings.exception.SavingsAccountWithdrawalExceedsMaxSingleAmountException;
 import org.apache.fineract.portfolio.savings.exception.SavingsOfficerAssignmentException;
 import org.apache.fineract.portfolio.savings.exception.SavingsOfficerUnassignmentException;
 import org.apache.fineract.portfolio.savings.exception.TransactionUpdateNotAllowedException;
@@ -359,6 +360,7 @@ public class SavingsAccountWritePlatformServiceJpaRepositoryImpl implements Savi
 
         final LocalDate transactionDate = command.localDateValueOfParameterNamed("transactionDate");
         final BigDecimal transactionAmount = command.bigDecimalValueOfParameterNamed("transactionAmount");
+        validateMaxSingleWithdrawalAmount(transactionAmount);
         final ExternalId externalId = this.externalIdFactory.createFromCommand(command, SavingsApiConstants.externalIdParamName);
 
         final Locale locale = command.extractLocale();
@@ -412,6 +414,15 @@ public class SavingsAccountWritePlatformServiceJpaRepositoryImpl implements Savi
                 .withSavingsId(savingsId) //
                 .with(changes) //
                 .build();
+    }
+
+    private void validateMaxSingleWithdrawalAmount(final BigDecimal transactionAmount) {
+        if (configurationDomainService.isMaxSingleWithdrawalAmountSavingsEnabled()) {
+            final Long limit = configurationDomainService.retrieveMaxSingleWithdrawalAmountSavings();
+            if (limit != null && limit > 0 && transactionAmount != null && transactionAmount.compareTo(BigDecimal.valueOf(limit)) > 0) {
+                throw new SavingsAccountWithdrawalExceedsMaxSingleAmountException(transactionAmount, BigDecimal.valueOf(limit));
+            }
+        }
     }
 
     @Transactional

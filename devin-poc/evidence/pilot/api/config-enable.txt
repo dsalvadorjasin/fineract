@@ -1,0 +1,4 @@
+PUT /configurations/76
+HTTP status: 200
+Response body:
+{"resourceId":76,"changes":{"enabled":true,"value":500}}

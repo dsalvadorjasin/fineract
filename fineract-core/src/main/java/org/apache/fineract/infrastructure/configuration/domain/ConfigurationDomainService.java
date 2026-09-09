@@ -183,4 +183,8 @@ public interface ConfigurationDomainService {
     boolean isBackdatedTransactionsDisallowed();
 
     Long retrieveBackdatedTransactionsToleranceDays();
+
+    boolean isMaxSingleWithdrawalAmountSavingsEnabled();
+
+    Long retrieveMaxSingleWithdrawalAmountSavings();
 }

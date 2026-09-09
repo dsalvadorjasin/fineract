@@ -1,0 +1,10 @@
+Job: Post Interest For Savings
+Job id: 6
+POST /jobs/6?command=executeJob
+HTTP status: 202
+Response body:
+
+
+GET /jobs/6/runhistory (completed poll)
+Response body:
+{"totalFilteredRecords":1,"pageItems":[{"id":8,"version":1,"jobRunStartTime":"2026-09-09T12:58:56.210Z","jobRunEndTime":"2026-09-09T12:58:56.250Z","status":"success","triggerType":"application"}]}

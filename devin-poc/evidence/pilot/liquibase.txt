@@ -1,0 +1,15 @@
+=== databasechangelog ===
+           id            |                                         filename                                          | orderexecuted 
+-------------------------+-------------------------------------------------------------------------------------------+---------------
+ 1                       | db/changelog/tenant/parts/0254_add_max_single_withdrawal_amount_savings_configuration.xml |          1995
+ 1                       | db/changelog/tenant/parts/0146_add_final_constraints.xml                                  |          1994
+ wc-loan-origination-009 | db/changelog/tenant/module/loanorigination/parts/0005_wc_loan_originator_mapping.xml      |          1993
+(3 rows)
+
+
+=== max-single-withdrawal-amount-savings configuration ===
+ id |                 name                 | enabled | value 
+----+--------------------------------------+---------+-------
+ 81 | max-single-withdrawal-amount-savings | f       |      
+(1 row)
+
