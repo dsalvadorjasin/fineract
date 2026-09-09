@@ -1,0 +1,77 @@
+# Devin PoC stack: PostgreSQL + Fineract (built locally with Jib) + Mifos web-app.
+# FOR TESTING PURPOSES ONLY. No TLS. Passwords come from the environment
+# (POSTGRES_PASSWORD), never from this file.
+#
+#   cd devin-poc && docker compose up -d
+#
+name: fineract-poc
+
+services:
+  db:
+    image: postgres:18.3
+    volumes:
+      - ../config/docker/postgresql/docker-entrypoint-initdb.d/01-init.sh:/docker-entrypoint-initdb.d/01-init.sh:Z,ro
+      - pgdata:/var/lib/postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      FINERACT_DB_USER: postgres
+      FINERACT_DB_PASS: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      FINERACT_TENANTS_DB_NAME: fineract_tenants
+      FINERACT_TENANT_DEFAULT_DB_NAME: fineract_default
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+    ports:
+      - "5432:5432"
+
+  fineract:
+    image: fineract:latest
+    user: "${FINERACT_USER:-1000}:${FINERACT_GROUP:-1000}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../config/docker/logback/logback-override.xml:/app/logback-override.xml
+    tmpfs:
+      - /tmp:rw,nosuid,size=256m
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ../config/docker/env/fineract.env
+      - ../config/docker/env/fineract-common.env
+      - ../config/docker/env/fineract-postgresql.env
+      - ./env/fineract-poc.env
+    environment:
+      FINERACT_HIKARI_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      FINERACT_DEFAULT_TENANTDB_PWD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8080/fineract-provider/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 90
+      start_period: 60s
+    ports:
+      - "8080:8080"
+
+  web-app:
+    image: ${WEB_APP_IMAGE:-openmf/web-app@sha256:0d2a9ccbdf5dea6e9975f17598a0d47b87842a692e0aa8b459e3cda94a1dd729}
+    restart: unless-stopped
+    depends_on:
+      fineract:
+        condition: service_healthy
+    environment:
+      FINERACT_API_URLS: http://localhost:8080
+      FINERACT_API_URL: http://localhost:8080
+      FINERACT_API_PROVIDER: /fineract-provider/api
+      FINERACT_API_VERSION: /v1
+      FINERACT_PLATFORM_TENANT_IDENTIFIER: default
+      FINERACT_PLATFORM_TENANT_IDENTIFIERS: default
+    ports:
+      - "4200:80"
+
+volumes:
+  pgdata:
