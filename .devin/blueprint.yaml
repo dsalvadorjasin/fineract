@@ -22,6 +22,12 @@ initialize:
       . "$NVM_DIR/nvm.sh"
       nvm install 22 && nvm alias default 22
       echo "PATH=$(dirname $(nvm which 22)):$PATH" >> $ENVRC
+  - name: DBeaver CE (desktop DB tool, see devin-poc/dbeaver/RUNBOOK.md)
+    run: |
+      if ! command -v dbeaver >/dev/null; then
+        curl -fL --retry 3 -o /tmp/dbeaver.deb https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y /tmp/dbeaver.deb && rm /tmp/dbeaver.deb
+      fi
   - name: pull runtime images
     run: |
       docker pull postgres:18.3
@@ -31,6 +37,9 @@ maintenance:
     run: |
       ./gradlew :fineract-provider:jibDockerBuild -x test --no-daemon --max-workers=2 -Dorg.gradle.jvmargs=-Xmx4g \
         || ./gradlew :fineract-provider:jibDockerBuild -x test --no-daemon --max-workers=2 -Dorg.gradle.jvmargs=-Xmx4g
+  - name: DBeaver connection profile + local JDBC driver (needs the Gradle cache from the Jib build)
+    run: |
+      bash devin-poc/dbeaver/setup-dbeaver.sh
 knowledge:
   - name: build
     contents: |
@@ -48,7 +57,8 @@ knowledge:
       Itests: devin-poc/harness/run-savings-itests.sh
   - name: database
     contents: |
-      PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost -U postgres -d fineract_default
+      PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost -U root -d fineract_default
+      GUI: dbeaver -> connection 'fineract-poc (localhost)' (read-only); run devin-poc/sql/assertions-dbeaver.sql with Alt+X
       Tables: m_savings_account, m_savings_account_transaction, acc_gl_journal_entry, m_portfolio_command_source, c_configuration, m_appuser
   - name: seed
     contents: |

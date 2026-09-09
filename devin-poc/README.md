@@ -11,9 +11,9 @@ assert on the database. See `CHANGE_REQUEST.md` for the pilot task and
 |---|---|
 | `docker-compose.yml`, `env/fineract-poc.env` | The stack (db :5432, fineract :8080, web-app :4200) |
 | `seed/` | `seed.sh` (idempotent API seed), `reset.sh` (wipe + seed), `lib.sh`, `out/ids.env` (generated) |
-| `sql/` | `assertions.sql` canned queries, `snapshot-state.sh` dumps them to `evidence/` |
+| `sql/` | `assertions.sql` canned psql queries (`assertions-dbeaver.sql` = plain-SQL twin for GUI tools), `snapshot-state.sh` dumps them to `evidence/` |
 | `playwright/` | Maker/checker UI flows against the web-app |
-| `desktop/` | DBeaver Computer-Use runbook |
+| `dbeaver/` | `setup-dbeaver.sh` (connection profile, local JDBC driver, `~/.pgpass`) + `RUNBOOK.md` for Computer-Use |
 | `harness/` | `run-savings-itests.sh` targeted integration tests |
 
 ## Credentials
