@@ -1,0 +1,12 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 [chromium] › maker-withdrawal.spec.ts:7:5 › maker submits a withdrawal for checker approval (4.4s)
+  ✓  2 [chromium] › checker-approve.spec.ts:7:5 › checker approves the pending withdrawal (3.8s)
+  ✓  3 [chromium] › checker-reject.spec.ts:7:5 › checker rejects a withdrawal (7.3s)
+  -  4 [chromium] › negative-max-withdrawal.spec.ts:6:5 › maximum withdrawal is rejected by the UI
+
+  1 skipped
+  3 passed (16.0s)
+PLAYWRIGHT_WALL_SECONDS=16.60
+PLAYWRIGHT_EXIT_STATUS=0

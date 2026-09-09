@@ -1,0 +1,249 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :buildSrc:extractPluginRequests FROM-CACHE
+> Task :buildSrc:generatePluginAdapters FROM-CACHE
+> Task :buildSrc:compileJava FROM-CACHE
+> Task :buildSrc:compileGroovy FROM-CACHE
+> Task :buildSrc:compileGroovyPlugins FROM-CACHE
+> Task :buildSrc:pluginDescriptors
+> Task :buildSrc:processResources
+> Task :buildSrc:classes
+> Task :buildSrc:jar
+
+> Configure project :
+matching ref: COMMIT - ca296557007779dd34f5a4514120030ff1bd72cd
+  ref configuration: COMMIT - pattern: null
+    version: ${describe.tag.version.major}.${describe.tag.version.minor.next}.0-SNAPSHOT
+    describeTagPattern: .*(\d+\.\d+\.\d+).*
+    describeTagFirstParent: false
+
+project version: 0.1.0-SNAPSHOT
+
+> Task :fineract-avro-schemas:preprocessAvroSchemas
+> Task :spotlessInternalRegisterDependencies
+> Task :fineract-avro-schemas:spotlessJson FROM-CACHE
+> Task :fineract-avro-schemas:spotlessJsonApply UP-TO-DATE
+
+> Task :fineract-accounting:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-accounting with 55 managed classes from 4 modules
+
+> Task :fineract-charge:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-charge with 47 managed classes from 3 modules
+
+> Task :fineract-command:compileJava FROM-CACHE
+> Task :fineract-command:processResources
+> Task :fineract-command:classes
+> Task :fineract-command:jar
+
+> Task :fineract-core:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-core with 40 managed classes from 1 modules
+
+> Task :fineract-validation:compileJava FROM-CACHE
+> Task :fineract-validation:processResources
+> Task :fineract-validation:classes
+> Task :fineract-validation:jar
+> Task :fineract-core:processResources NO-SOURCE
+
+> Task :fineract-tax:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-tax with 44 managed classes from 2 modules
+
+> Task :fineract-tax:processResources NO-SOURCE
+> Task :fineract-charge:processResources
+> Task :fineract-accounting:processResources
+
+> Task :fineract-branch:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-branch with 59 managed classes from 5 modules
+
+> Task :fineract-branch:processResources
+
+> Task :fineract-cob:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-cob with 42 managed classes from 2 modules
+
+> Task :fineract-cob:processResources NO-SOURCE
+> Task :fineract-command-audit:compileJava FROM-CACHE
+> Task :fineract-command-audit:processResources
+> Task :fineract-command-audit:classes
+> Task :fineract-command-audit:jar
+> Task :fineract-command-jdbc:compileJava FROM-CACHE
+> Task :fineract-command-jdbc:processResources
+> Task :fineract-command-jdbc:classes
+> Task :fineract-command-jdbc:jar
+> Task :fineract-document:processResources NO-SOURCE
+
+> Task :fineract-investor:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-investor with 122 managed classes from 8 modules
+
+> Task :fineract-loan:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-loan with 114 managed classes from 7 modules
+
+> Task :fineract-rates:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-rates with 42 managed classes from 2 modules
+
+> Task :fineract-rates:processResources
+> Task :fineract-loan:processResources
+> Task :fineract-investor:processResources
+
+> Task :fineract-loan-origination:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-loan-origination with 142 managed classes from 9 modules
+
+> Task :fineract-working-capital-loan:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-working-capital-loan with 139 managed classes from 8 modules
+
+> Task :fineract-working-capital-loan:processResources
+> Task :fineract-loan-origination:processResources
+
+> Task :fineract-progressive-loan:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-progressive-loan with 117 managed classes from 8 modules
+
+> Task :fineract-progressive-loan:processResources
+
+> Task :fineract-provider:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-provider with 272 managed classes from 15 modules
+
+> Task :fineract-report:processResources NO-SOURCE
+
+> Task :fineract-savings:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-savings with 82 managed classes from 7 modules
+
+> Task :fineract-savings:processResources
+
+> Task :fineract-security:generateStaticWeavingPersistenceXml
+Generated EclipseLink static weaving persistence.xml for :fineract-security with 42 managed classes from 2 modules
+
+> Task :fineract-security:processResources NO-SOURCE
+> Task :fineract-avro-schemas:buildJavaSdk
+> Task :fineract-avro-schemas:compileJava FROM-CACHE
+> Task :fineract-avro-schemas:processResources
+> Task :fineract-avro-schemas:classes
+> Task :fineract-provider:generateGitProperties
+> Task :fineract-provider:generateRebelMain
+> Task :fineract-provider:processResources
+> Task :fineract-provider:prepareInputYaml
+> Task :fineract-client:spotlessMisc FROM-CACHE
+> Task :fineract-client:spotlessMiscApply UP-TO-DATE
+> Task :fineract-client:processResources
+> Task :fineract-avro-schemas:jar
+> Task :fineract-client-feign:spotlessMisc FROM-CACHE
+> Task :fineract-client-feign:spotlessMiscApply UP-TO-DATE
+> Task :fineract-client-feign:processResources
+> Task :integration-tests:compileJava NO-SOURCE
+> Task :integration-tests:processResources NO-SOURCE
+> Task :integration-tests:classes UP-TO-DATE
+> Task :integration-tests:processTestResources
+> Task :fineract-core:compileJava FROM-CACHE
+> Task :fineract-core:classes UP-TO-DATE
+> Task :fineract-core:jar
+> Task :fineract-tax:compileJava FROM-CACHE
+> Task :fineract-tax:classes UP-TO-DATE
+> Task :fineract-cob:compileJava FROM-CACHE
+> Task :fineract-cob:classes UP-TO-DATE
+> Task :fineract-tax:jar
+> Task :fineract-cob:jar
+> Task :fineract-charge:compileJava FROM-CACHE
+> Task :fineract-charge:classes
+> Task :fineract-charge:jar
+> Task :fineract-document:compileJava FROM-CACHE
+> Task :fineract-document:classes UP-TO-DATE
+> Task :fineract-document:jar
+> Task :fineract-rates:compileJava FROM-CACHE
+> Task :fineract-rates:classes
+> Task :fineract-rates:jar
+> Task :fineract-accounting:compileJava FROM-CACHE
+> Task :fineract-accounting:classes
+> Task :fineract-report:compileJava FROM-CACHE
+> Task :fineract-report:classes UP-TO-DATE
+> Task :fineract-report:jar
+> Task :fineract-accounting:jar
+> Task :fineract-security:compileJava FROM-CACHE
+> Task :fineract-branch:compileJava FROM-CACHE
+> Task :fineract-branch:classes
+> Task :fineract-branch:jar
+> Task :fineract-savings:compileJava FROM-CACHE
+> Task :fineract-savings:classes
+> Task :fineract-savings:jar
+> Task :fineract-security:classes UP-TO-DATE
+> Task :fineract-security:jar
+> Task :fineract-loan:compileJava FROM-CACHE
+> Task :fineract-loan:classes
+> Task :fineract-loan:jar
+> Task :fineract-investor:compileJava FROM-CACHE
+> Task :fineract-investor:classes
+> Task :fineract-investor:jar
+> Task :fineract-working-capital-loan:compileJava FROM-CACHE
+> Task :fineract-working-capital-loan:classes
+> Task :fineract-progressive-loan:compileJava FROM-CACHE
+> Task :fineract-progressive-loan:classes
+> Task :fineract-progressive-loan:jar
+> Task :fineract-working-capital-loan:jar
+> Task :fineract-loan-origination:compileJava FROM-CACHE
+> Task :fineract-loan-origination:classes
+> Task :fineract-loan-origination:jar
+> Task :fineract-provider:compileJava FROM-CACHE
+> Task :fineract-provider:classes
+> Task :fineract-provider:resolve
+> Task :fineract-client-feign:buildJavaSdk FROM-CACHE
+> Task :fineract-client:buildJavaSdk FROM-CACHE
+> Task :fineract-provider:jar
+> Task :fineract-client:cleanupGeneratedJavaFiles
+> Task :fineract-client:licenseFormatMain UP-TO-DATE
+> Task :fineract-client:buildTypescriptAngularSdk FROM-CACHE
+> Task :fineract-client-feign:cleanupGeneratedJavaFiles
+> Task :fineract-client-feign:licenseFormatMain UP-TO-DATE
+> Task :fineract-client-feign:compileJava FROM-CACHE
+> Task :fineract-client-feign:classes
+> Task :fineract-client-feign:jar
+
+> Task :fineract-client:buildAsciidoc
+Cleaned up output directory /home/ubuntu/repos/fineract-int/fineract-client/build/generated/asciidoc before code generation.
+There were issues with the specification, but validation has been explicitly disabled.
+Errors: 
+	-attribute paths.'/v1/templates/{templateId}/template'(get).responses.default.description is missing
+	-attribute paths.'/v1/templates/template'(get).responses.default.description is missing
+
+base part for include markup lambda not found: null as /home/ubuntu/.gradle/daemon/9.7.1/null
+base part for include markup lambda not found: null as /home/ubuntu/.gradle/daemon/9.7.1/null
+No application/json content media type found in response. Response examples can currently only be generated for application/json media type.
+No application/json content media type found in response. Response examples can currently only be generated for application/json media type.
+############################################################################################
+# Thanks for using OpenAPI Generator.                                                      #
+# We appreciate your support! Please consider donation to help us maintain this project.   #
+# https://opencollective.com/openapi_generator/donate                                      #
+############################################################################################
+Successfully generated code to /home/ubuntu/repos/fineract-int/fineract-client/build/generated/asciidoc
+
+> Task :fineract-client:compileJava FROM-CACHE
+> Task :fineract-client:classes
+> Task :fineract-client:jar
+> Task :integration-tests:compileTestJava FROM-CACHE
+> Task :integration-tests:testClasses
+
+> Task :integration-tests:test
+
+[0K[1morg.apache.fineract.integrationtests.SavingsAccountBalanceCheckAfterReversalTest[m
+
+[0K[1m  Test [22mtestSavingsBalanceAfterWithdrawal()[32m PASSED[31m (2.4s)[m
+[0K[1m  Test [22mtestSavingsBalanceWithOverDraftAfterWithdrawal()[32m PASSED[33m (1.8s)[m
+
+[0K[1morg.apache.fineract.integrationtests.SavingsAccountTransactionTest[m
+
+[0K[1m  Test [22mverifySavingsTransactionSubmittedOnDateAndTransactionDate()[32m PASSED[31m (2.2s)[m
+[0K[1m  Test [22mtestConcurrentSavingsTransactions()[32m PASSED[31m (4.7s)[m
+[0K[1m  Test [22mtestDeadlockSavingsBatchTransactions()[32m PASSED[31m (9.1s)[m
+[0K[1m  Test [22mtestConcurrentSavingsBatchTransactions()[32m PASSED[31m (6.1s)[m
+
+[0K[1;32mSUCCESS: [39mExecuted 6 tests in 28.1s[m
+
+
+[Incubating] Problems report is available at: file:///home/ubuntu/repos/fineract-int/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 17s
+113 actionable tasks: 72 executed, 36 from cache, 5 up-to-date
+Savings integration tests wall time: 00:01:18
+ITEST_HARNESS_WALL_SECONDS=78.02
+ITEST_EXIT_STATUS=0
