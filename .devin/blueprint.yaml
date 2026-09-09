@@ -1,0 +1,58 @@
+# https://docs.devin.ai/onboard-devin/environment-yaml
+# Devin PoC environment for the Fineract fork (see devin-poc/README.md).
+initialize:
+  - name: system packages
+    run: |
+      sudo apt-get update
+      sudo DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql-client jq curl
+  - name: Java 25 (Azul Zulu, required by build.gradle toolchain)
+    run: |
+      if [ ! -x /home/ubuntu/.jdks/zulu25/bin/java ]; then
+        mkdir -p /home/ubuntu/.jdks && cd /home/ubuntu/.jdks
+        curl -fL --retry 3 -o zulu25.tar.gz https://cdn.azul.com/zulu/bin/zulu25.36.205-ca-jdk25.0.4.1-linux_x64.tar.gz
+        tar -xzf zulu25.tar.gz && rm zulu25.tar.gz
+        mv zulu25.36.205-ca-jdk25.0.4.1-linux_x64 zulu25
+      fi
+      echo "JAVA_HOME=/home/ubuntu/.jdks/zulu25" >> $ENVRC
+      echo "PATH=/home/ubuntu/.jdks/zulu25/bin:$PATH" >> $ENVRC
+  - name: Node 22 via nvm
+    run: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] || (curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash)
+      . "$NVM_DIR/nvm.sh"
+      nvm install 22 && nvm alias default 22
+      echo "PATH=$(dirname $(nvm which 22)):$PATH" >> $ENVRC
+  - name: pull runtime images
+    run: |
+      docker pull postgres:18.3
+      docker pull openmf/web-app@sha256:0d2a9ccbdf5dea6e9975f17598a0d47b87842a692e0aa8b459e3cda94a1dd729
+  - name: Playwright Chromium
+    run: |
+      cd devin-poc/playwright && npm ci && npx playwright install --with-deps chromium
+maintenance:
+  - name: build fineract:latest with Jib (warms ~/.gradle; retried once for Maven Central 429s)
+    run: |
+      ./gradlew :fineract-provider:jibDockerBuild -x test --no-daemon --max-workers=2 -Dorg.gradle.jvmargs=-Xmx4g \
+        || ./gradlew :fineract-provider:jibDockerBuild -x test --no-daemon --max-workers=2 -Dorg.gradle.jvmargs=-Xmx4g
+knowledge:
+  - name: build
+    contents: |
+      ./gradlew :fineract-provider:jibDockerBuild -x test --no-daemon   # -> fineract:latest (~4-5 min)
+      Redeploy: ./gradlew :fineract-provider:jibDockerBuild -x test && docker compose -f devin-poc/docker-compose.yml up -d fineract
+  - name: run
+    contents: |
+      cd devin-poc && docker compose up -d   # needs POSTGRES_PASSWORD in env; fineract healthy in ~1 min
+      Health: curl http://localhost:8080/fineract-provider/actuator/health
+      API:    curl -u mifos:$FINERACT_ADMIN_PASSWORD -H 'Fineract-Platform-TenantId: default' http://localhost:8080/fineract-provider/api/v1/clients
+      Web UI: http://localhost:4200 (mifos / $FINERACT_ADMIN_PASSWORD; 'password' on an unseeded DB)
+  - name: test
+    contents: |
+      Unit:   ./gradlew :fineract-provider:test --tests '<pattern>'
+      Itests: devin-poc/test/run-savings-itests.sh (destroys seeded savings state; run reset.sh after)
+  - name: database
+    contents: |
+      PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost -U postgres -d fineract_default
+      Tables: m_savings_account, m_savings_account_transaction, acc_gl_journal_entry, m_portfolio_command_source, c_configuration, m_appuser
+  - name: seed
+    contents: |
+      devin-poc/seed/seed.sh (idempotent), devin-poc/seed/reset.sh (down -v + up + seed), ids in devin-poc/seed/out/ids.env
