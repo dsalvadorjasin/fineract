@@ -61,7 +61,7 @@ Attach or link console logs / Gradle report dirs.
 - UI screenshot: error banner text
 - SQL: prove **no** new row in `m_savings_account_transaction` and
   `acc_gl_journal_entry`; `m_portfolio_command_source` shows one `ERROR`
-  (status 4) audit row and no `AWAITING_APPROVAL` (status 2) row
+  (status 5) audit row and no `AWAITING_APPROVAL` (status 2) row
 
 ### 4.4 Unaffected paths
 
