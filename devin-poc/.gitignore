@@ -1,0 +1,5 @@
+seed/out/
+playwright/node_modules/
+playwright/test-results/
+playwright/playwright-report/
+playwright/.auth/
