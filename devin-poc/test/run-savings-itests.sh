@@ -9,9 +9,10 @@ set -euo pipefail
 # it does not change the test classes or their REST configuration.
 #
 # Default coverage is intentionally narrow. ClientSavingsIntegrationTest has 45
-# tests and creates a broad set of products/configuration; add it explicitly
-# only when that larger suite is wanted. Additional arguments must be Gradle
-# --tests <pattern> filters and are added to the defaults.
+# tests and creates a broad set of products/configuration; select it explicitly
+# only when that larger suite is wanted. When --tests filters are supplied, they
+# replace the defaults so a focused class can be run without the destructive
+# default set.
 #
 # These repository tests are not tenant-isolated: FeignSavingsTestBase installs
 # FeignSavingsLifecycleExtension, whose cleanup closes every active savings
@@ -53,7 +54,8 @@ done
 
 for source_file in \
     "$REPO_ROOT/integration-tests/src/test/java/org/apache/fineract/integrationtests/SavingsAccountTransactionTest.java" \
-    "$REPO_ROOT/integration-tests/src/test/java/org/apache/fineract/integrationtests/SavingsAccountBalanceCheckAfterReversalTest.java"; do
+    "$REPO_ROOT/integration-tests/src/test/java/org/apache/fineract/integrationtests/SavingsAccountBalanceCheckAfterReversalTest.java" \
+    "$REPO_ROOT/integration-tests/src/test/java/org/apache/fineract/integrationtests/SavingsMaxSingleWithdrawalTest.java"; do
     if [[ ! -f "$source_file" ]]; then
         echo "Configured savings integration test source is missing: $source_file" >&2
         exit 1
@@ -82,11 +84,18 @@ gradle_args=(
     -PcargoDisabled
     --no-daemon
     --max-workers=2
-    --tests
-    org.apache.fineract.integrationtests.SavingsAccountTransactionTest
-    --tests
-    org.apache.fineract.integrationtests.SavingsAccountBalanceCheckAfterReversalTest
 )
+
+if (($# == 0)); then
+    gradle_args+=(
+        --tests
+        org.apache.fineract.integrationtests.SavingsAccountTransactionTest
+        --tests
+        org.apache.fineract.integrationtests.SavingsAccountBalanceCheckAfterReversalTest
+        --tests
+        org.apache.fineract.integrationtests.SavingsMaxSingleWithdrawalTest
+    )
+fi
 
 if [[ -n "${GRADLE_INIT_SCRIPT:-}" ]]; then
     if [[ ! -f "$GRADLE_INIT_SCRIPT" ]]; then

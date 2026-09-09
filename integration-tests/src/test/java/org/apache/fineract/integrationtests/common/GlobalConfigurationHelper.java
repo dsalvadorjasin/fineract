@@ -161,6 +161,13 @@ public class GlobalConfigurationHelper {
         makerCheckerDefault.put("trapDoor", false);
         defaults.add(makerCheckerDefault);
 
+        HashMap<String, Object> maxSingleWithdrawalAmountSavingsDefault = new HashMap<>();
+        maxSingleWithdrawalAmountSavingsDefault.put("name", GlobalConfigurationConstants.MAX_SINGLE_WITHDRAWAL_AMOUNT_SAVINGS);
+        maxSingleWithdrawalAmountSavingsDefault.put("value", 0L);
+        maxSingleWithdrawalAmountSavingsDefault.put("enabled", false);
+        maxSingleWithdrawalAmountSavingsDefault.put("trapDoor", false);
+        defaults.add(maxSingleWithdrawalAmountSavingsDefault);
+
         HashMap<String, Object> amazonS3Default = new HashMap<>();
         amazonS3Default.put("name", GlobalConfigurationConstants.AMAZON_S3);
         amazonS3Default.put("value", 0L);

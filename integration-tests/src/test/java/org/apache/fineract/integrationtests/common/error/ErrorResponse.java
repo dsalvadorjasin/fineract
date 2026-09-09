@@ -61,6 +61,7 @@ public class ErrorResponse {
     public static class Error {
 
         private String developerMessage;
+        private String userMessageGlobalisationCode;
         private List<ErrorMessageArg> args;
     }
 

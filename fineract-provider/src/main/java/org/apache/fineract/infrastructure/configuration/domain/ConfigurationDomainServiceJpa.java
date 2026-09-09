@@ -645,6 +645,16 @@ public class ConfigurationDomainServiceJpa implements ConfigurationDomainService
     }
 
     @Override
+    public boolean isMaxSingleWithdrawalAmountSavingsEnabled() {
+        return getGlobalConfigurationPropertyData(GlobalConfigurationConstants.MAX_SINGLE_WITHDRAWAL_AMOUNT_SAVINGS).isEnabled();
+    }
+
+    @Override
+    public Long retrieveMaxSingleWithdrawalAmountSavings() {
+        return getGlobalConfigurationPropertyData(GlobalConfigurationConstants.MAX_SINGLE_WITHDRAWAL_AMOUNT_SAVINGS).getValue();
+    }
+
+    @Override
     public Long getOfficeId() {
         final GlobalConfigurationPropertyData property = getGlobalConfigurationPropertyData(GlobalConfigurationConstants.OFFICE_ID);
         return property.getValue();
