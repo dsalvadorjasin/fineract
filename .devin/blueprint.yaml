@@ -48,7 +48,7 @@ knowledge:
   - name: test
     contents: |
       Unit:   ./gradlew :fineract-provider:test --tests '<pattern>'
-      Itests: devin-poc/harness/run-savings-itests.sh
+      Itests: devin-poc/test/run-savings-itests.sh (destroys seeded savings state; run reset.sh after)
   - name: database
     contents: |
       PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost -U postgres -d fineract_default

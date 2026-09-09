@@ -14,7 +14,7 @@ assert on the database. See `CHANGE_REQUEST.md` for the pilot task and
 | `sql/` | `assertions.sql` canned queries, `snapshot-state.sh` dumps them to `evidence/` |
 | `playwright/` | Maker/checker UI flows against the web-app |
 | `desktop/` | DBeaver Computer-Use runbook |
-| `harness/` | `run-savings-itests.sh` targeted integration tests |
+| `test/` | `run-savings-itests.sh` targeted integration tests against the running stack (closes all savings accounts; reset afterwards) |
 
 ## Credentials
 
