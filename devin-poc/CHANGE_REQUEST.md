@@ -25,9 +25,15 @@ Constraints:
 1. No `m_savings_account_transaction` row and no `acc_gl_journal_entry` row
    may be written for a rejected attempt.
 2. The rule applies whether or not maker-checker is enabled: it must fail at
-   **maker submission time**, before the command is queued in
-   `m_portfolio_command_source`. A rejected attempt therefore leaves no
-   command-source row either.
+   **maker submission time**, before the command is queued for approval.
+   Note how Fineract's command pipeline works
+   (`CommandSourceService.processCommandAndSaveResult`): the handler runs
+   first, and only a successful handler result is marked
+   `AWAITING_APPROVAL` and rolled back. A domain exception thrown from the
+   withdrawal handler therefore never reaches the queue; the platform still
+   records the failed attempt in `m_portfolio_command_source` with
+   `status = ERROR` and the error JSON in `result`. That audit row is
+   expected; an `AWAITING_APPROVAL` (`status = 2`) row is not.
 3. Deposits, account transfers, interest posting, fee/charge withdrawals and
    withdrawals when the configuration is disabled are unaffected.
 4. Amount equal to the limit is allowed.
@@ -68,8 +74,9 @@ Constraints:
    checker approves; maker withdrawal above the limit → error banner with the
    new message. Repeat both via API.
 5. SQL: transaction rows, balanced journal entries, maker/checker audit trail
-   in `m_portfolio_command_source`, **no row of any kind** for the rejected
-   attempt. Use `devin-poc/sql/snapshot-state.sh <label>`.
+   in `m_portfolio_command_source`; for the rejected attempt: no
+   transaction row, no journal rows, no `AWAITING_APPROVAL` command row (only
+   the `ERROR` audit row). Use `devin-poc/sql/snapshot-state.sh <label>`.
 6. "EOD": run the `Post Interest For Savings` job via `/jobs`, assert the
    interest transaction and its journal entries.
 7. Un-skip and complete `devin-poc/playwright/tests/negative-max-withdrawal.spec.ts`;
