@@ -21,6 +21,7 @@ package org.apache.fineract.infrastructure.security.converter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.fineract.infrastructure.security.data.FineractJwtAuthenticationToken;
+import org.apache.fineract.infrastructure.security.exception.OidcIdentityBindingException;
 import org.apache.fineract.infrastructure.security.exception.OidcUserNotFoundException;
 import org.apache.fineract.infrastructure.security.service.FineractOidcUserService;
 import org.apache.fineract.useradministration.domain.AppUser;
@@ -62,8 +63,8 @@ public class FineractOidcJwtAuthenticationConverter implements Converter<Jwt, Fi
         try {
             AppUser appUser = oidcUserService.resolveUser(jwt, username);
             return new FineractJwtAuthenticationToken(jwt, appUser.getAuthorities(), appUser);
-        } catch (OidcUserNotFoundException ex) {
-            log.warn("JWT conversion failed — OIDC user not found: {}", ex.getMessage());
+        } catch (OidcUserNotFoundException | OidcIdentityBindingException ex) {
+            log.warn("JWT conversion failed — OIDC identity could not be mapped to a Fineract user: {}", ex.getMessage());
             throw new OAuth2AuthenticationException(new OAuth2Error(OAuth2ErrorCodes.INVALID_TOKEN, ex.getMessage(), null), ex);
         }
     }

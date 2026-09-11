@@ -24,12 +24,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.fineract.infrastructure.core.config.FineractProperties;
 import org.apache.fineract.infrastructure.security.data.FineractOidcUser;
+import org.apache.fineract.infrastructure.security.data.OidcFederatedIdentity;
 import org.apache.fineract.useradministration.domain.AppUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.stereotype.Service;
 
 /**
@@ -55,7 +57,10 @@ public class FineractOidcUserService {
 
         log.debug("Resolving Fineract user for OIDC subject '{}' (username claim: '{}')", jwt.getSubject(), username);
 
-        return resolutionService.resolveOrCreate(username, email, firstName, lastName, Set.of());
+        OidcFederatedIdentity identity = new OidcFederatedIdentity(extractIssuer(jwt), jwt.getSubject(), username, email,
+                isEmailVerified(jwt), firstName, lastName, Set.of());
+
+        return resolutionService.resolveOrCreate(identity);
     }
 
     /**
@@ -73,10 +78,14 @@ public class FineractOidcUserService {
         String email = oidcUser.getEmail();
         String firstName = oidcUser.getGivenName();
         String lastName = oidcUser.getFamilyName();
+        String issuer = oidcUser.getIssuer() != null ? oidcUser.getIssuer().toString() : null;
 
         log.debug("Processing OIDC user '{}' for tenant '{}'", username, tenantId);
 
-        AppUser appUser = resolutionService.resolveOrCreate(username, email, firstName, lastName, Set.of());
+        OidcFederatedIdentity identity = new OidcFederatedIdentity(issuer, oidcUser.getSubject(), username, email,
+                Boolean.TRUE.equals(oidcUser.getEmailVerified()), firstName, lastName, Set.of());
+
+        AppUser appUser = resolutionService.resolveOrCreate(identity);
 
         Collection<? extends GrantedAuthority> authorities = appUser.getAuthorities();
         OidcIdToken idToken = oidcUser.getIdToken();
@@ -92,6 +101,19 @@ public class FineractOidcUserService {
         String claimName = fineractProperties.getSecurity().getOidcFederation().getUsernameClaim();
         String username = jwt.getClaimAsString(claimName);
         return username != null ? username : jwt.getSubject();
+    }
+
+    private String extractIssuer(Jwt jwt) {
+        Object issuer = jwt.getClaims().get(JwtClaimNames.ISS);
+        return issuer != null ? issuer.toString() : null;
+    }
+
+    private boolean isEmailVerified(Jwt jwt) {
+        Object claim = jwt.getClaim("email_verified");
+        if (claim instanceof Boolean verified) {
+            return verified;
+        }
+        return claim instanceof String verified && Boolean.parseBoolean(verified);
     }
 
     /**

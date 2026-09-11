@@ -18,7 +18,7 @@
  */
 package org.apache.fineract.infrastructure.security.service;
 
-import java.util.Set;
+import org.apache.fineract.infrastructure.security.data.OidcFederatedIdentity;
 import org.apache.fineract.useradministration.domain.AppUser;
 
 /**
@@ -28,10 +28,12 @@ import org.apache.fineract.useradministration.domain.AppUser;
 public interface OidcAppUserResolutionService {
 
     /**
-     * Looks up an existing AppUser by username, falling back to email. If no match is found and auto-create is enabled,
-     * creates a new user with the supplied attributes and the configured default roles merged with any requested roles.
-     * Throws {@link org.apache.fineract.infrastructure.security.exception.OidcUserNotFoundException} when the user is
-     * not found and auto-create is disabled.
+     * Looks up the AppUser bound to the identity's issuer/subject pair. When no binding exists, the identity may claim
+     * an existing account by verified email if that is enabled, otherwise a new user is created when auto-create is
+     * enabled. Throws {@link org.apache.fineract.infrastructure.security.exception.OidcUserNotFoundException} when no
+     * bound user exists and auto-create is disabled, and
+     * {@link org.apache.fineract.infrastructure.security.exception.OidcIdentityBindingException} when the identity
+     * cannot be bound safely.
      */
-    AppUser resolveOrCreate(String username, String email, String firstName, String lastName, Set<String> requestedRoles);
+    AppUser resolveOrCreate(OidcFederatedIdentity identity);
 }

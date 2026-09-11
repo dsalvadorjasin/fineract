@@ -584,6 +584,10 @@ public class FineractProperties {
             private String usernameClaim = "preferred_username";
             // When true, creates a Fineract AppUser on first successful OIDC login.
             private boolean autoCreateUser = false;
+            // When true, a federated identity without an issuer/subject binding may claim an existing
+            // Fineract account whose email matches a verified 'email' claim. Privileged accounts
+            // (ALL_FUNCTIONS, system user) are never linked this way.
+            private boolean linkExistingUserByVerifiedEmail = false;
             // Comma-separated role names assigned to auto-created users.
             private String defaultRoles = "";
             // Controls the RP-Initiated Logout URL format.
