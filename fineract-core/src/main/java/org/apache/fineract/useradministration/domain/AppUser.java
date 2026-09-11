@@ -155,6 +155,14 @@ public class AppUser extends AbstractPersistableCustom<Long> implements Platform
     @Column(name = "is_password_reset_enabled", nullable = false)
     private boolean passwordResetAllowed = false;
 
+    @Getter
+    @Column(name = "oidc_issuer", length = 255)
+    private String oidcIssuer;
+
+    @Getter
+    @Column(name = "oidc_subject", length = 255)
+    private String oidcSubject;
+
     public static AppUser fromJson(final Office userOffice, final Staff linkedStaff, final Set<Role> allRoles, final JsonCommand command) {
 
         final String username = command.stringValueOfParameterNamed("username");
@@ -296,6 +304,21 @@ public class AppUser extends AbstractPersistableCustom<Long> implements Platform
 
     public void updatePasswordResetAllowed(final boolean passwordResetAllowed) {
         this.passwordResetAllowed = passwordResetAllowed && !isSystemUser() && !Boolean.TRUE.equals(this.cannotChangePassword);
+    }
+
+    public boolean hasFederatedIdentity() {
+        return StringUtils.isNotBlank(this.oidcIssuer) && StringUtils.isNotBlank(this.oidcSubject);
+    }
+
+    public void linkFederatedIdentity(final String issuer, final String subject) {
+        if (StringUtils.isBlank(issuer) || StringUtils.isBlank(subject)) {
+            throw new IllegalArgumentException("Federated identity requires both an issuer and a subject");
+        }
+        if (hasFederatedIdentity() && !(this.oidcIssuer.equals(issuer) && this.oidcSubject.equals(subject))) {
+            throw new IllegalStateException("User is already linked to a different federated identity");
+        }
+        this.oidcIssuer = issuer;
+        this.oidcSubject = subject;
     }
 
     public void changeOffice(final Office differentOffice) {

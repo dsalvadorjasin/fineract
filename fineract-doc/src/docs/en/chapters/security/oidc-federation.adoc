@@ -43,7 +43,7 @@ Tenant C (Azure AD) ──► JWT  ──┘         │
                                           │  builds + caches AuthenticationManager
                                           ▼
                               FineractOidcJwtAuthenticationConverter
-                                  │  maps JWT → AppUser (username / email / auto-create)
+                                  │  maps JWT → AppUser (iss + sub binding / auto-create)
                                   ▼
                               Business Logic (AppUser principal — same as Basic Auth)
 ----
@@ -97,11 +97,15 @@ All global properties are under `fineract.security.oidc-federation.*`.
 
 | `username-claim`
 | `preferred_username`
-| JWT claim used as the Fineract username. Common alternatives: `email`, `sub`. Can be overridden per-issuer in the `issuers[]` list or the DB config.
+| JWT claim used as the username of an auto-created Fineract user. Common alternatives: `email`, `sub`. Can be overridden per-issuer in the `issuers[]` list or the DB config. It is never used to select an existing account.
 
 | `auto-create-user`
 | `false`
-| When `true`, a Fineract `AppUser` is created automatically on the first successful login for an unknown identity. When `false`, login fails with HTTP 401 unless the user already exists.
+| When `true`, a Fineract `AppUser` is created automatically on the first successful login for an unknown identity. When `false`, login fails with HTTP 401 unless an account is already bound to the identity.
+
+| `link-existing-user-by-verified-email`
+| `false`
+| When `true`, an identity with no binding yet may claim an existing account whose email equals the token's `email` claim, provided `email_verified` is `true`. Accounts already bound to another identity, the system user, and accounts holding `ALL_FUNCTIONS` are never linked this way.
 
 | `default-roles`
 | _(empty)_
@@ -119,6 +123,16 @@ All global properties are under `fineract.security.oidc-federation.*`.
 | _(empty)_
 | Static per-issuer configuration list (YAML fallback). See <<_yaml_issuer_list_fallback>> for details.
 |===
+
+== Identity Binding
+
+A Fineract `AppUser` is selected exclusively by the issuer-scoped subject of the token: the `iss` and `sub` claims are stored on the user (`m_appuser.oidc_issuer`, `m_appuser.oidc_subject`) and are the only key matched at login. Claims an end user can typically change at the IdP — `preferred_username`, `email` — never select an account, so a token carrying `preferred_username=mifos` cannot authenticate as the `mifos` superuser.
+
+Bindings are established in one of three ways:
+
+* an administrator sets `oidc_issuer` / `oidc_subject` on an existing user;
+* auto-creation (`auto-create-user=true`) stores the binding on the user it creates — creation is refused when the username claim collides with an existing account;
+* opt-in verified-email linking (`link-existing-user-by-verified-email=true`) binds an unbound, non-privileged account whose email matches a verified `email` claim on first login.
 
 == YAML Issuer List Fallback
 
