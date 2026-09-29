@@ -187,8 +187,8 @@ public class SavingsConfiguration {
     @Bean
     @ConditionalOnMissingBean(DepositAccountOnHoldTransactionReadPlatformService.class)
     public DepositAccountOnHoldTransactionReadPlatformService depositAccountOnHoldTransactionReadPlatformService(JdbcTemplate jdbcTemplate,
-            ColumnValidator columnValidator, DatabaseSpecificSQLGenerator sqlGenerator, PaginationHelper paginationHelper) {
-        return new DepositAccountOnHoldTransactionReadPlatformServiceImpl(jdbcTemplate, sqlGenerator, columnValidator, paginationHelper);
+            DatabaseSpecificSQLGenerator sqlGenerator, PaginationHelper paginationHelper) {
+        return new DepositAccountOnHoldTransactionReadPlatformServiceImpl(jdbcTemplate, sqlGenerator, paginationHelper);
     }
 
     @Bean
