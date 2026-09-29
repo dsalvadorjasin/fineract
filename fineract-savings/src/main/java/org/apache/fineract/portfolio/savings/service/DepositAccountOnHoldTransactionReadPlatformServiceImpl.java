@@ -23,15 +23,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.apache.fineract.infrastructure.core.data.EnumOptionData;
 import org.apache.fineract.infrastructure.core.domain.JdbcSupport;
+import org.apache.fineract.infrastructure.core.exception.PlatformApiDataValidationException;
 import org.apache.fineract.infrastructure.core.service.Page;
 import org.apache.fineract.infrastructure.core.service.PaginationHelper;
 import org.apache.fineract.infrastructure.core.service.SearchParameters;
 import org.apache.fineract.infrastructure.core.service.database.DatabaseSpecificSQLGenerator;
-import org.apache.fineract.infrastructure.security.utils.ColumnValidator;
 import org.apache.fineract.portfolio.savings.data.DepositAccountOnHoldTransactionData;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -39,9 +43,11 @@ import org.springframework.jdbc.core.RowMapper;
 @RequiredArgsConstructor
 public class DepositAccountOnHoldTransactionReadPlatformServiceImpl implements DepositAccountOnHoldTransactionReadPlatformService {
 
+    private static final Set<String> ALLOWED_SORT_ORDERS = Set.of("ASC", "DESC");
+    private static final Map<String, String> ORDER_BY_COLUMNS = buildOrderByColumns();
+
     private final JdbcTemplate jdbcTemplate;
     private final DatabaseSpecificSQLGenerator sqlGenerator;
-    private final ColumnValidator columnValidator;
     private final PaginationHelper paginationHelper;
     private final DepositAccountOnHoldTransactionsMapper mapper = new DepositAccountOnHoldTransactionsMapper();
 
@@ -61,12 +67,10 @@ public class DepositAccountOnHoldTransactionReadPlatformServiceImpl implements D
         }
 
         if (searchParameters.hasOrderBy()) {
-            sqlBuilder.append(" order by ").append(searchParameters.getOrderBy());
-            this.columnValidator.validateSqlInjection(sqlBuilder.toString(), searchParameters.getOrderBy());
+            sqlBuilder.append(" order by ").append(resolveOrderByColumn(searchParameters.getOrderBy()));
 
             if (searchParameters.hasSortOrder()) {
-                sqlBuilder.append(' ').append(searchParameters.getSortOrder());
-                this.columnValidator.validateSqlInjection(sqlBuilder.toString(), searchParameters.getSortOrder());
+                sqlBuilder.append(' ').append(resolveSortOrder(searchParameters.getSortOrder()));
             }
         }
 
@@ -82,6 +86,42 @@ public class DepositAccountOnHoldTransactionReadPlatformServiceImpl implements D
         final Object[] finalObjectArray = paramObj.toArray();
         return this.paginationHelper.fetchPage(this.jdbcTemplate, sqlBuilder.toString(), finalObjectArray, this.mapper);
 
+    }
+
+    private static Map<String, String> buildOrderByColumns() {
+        final Map<String, String> columns = new HashMap<>();
+        addOrderByColumn(columns, "tr.id", "id", "transactionid");
+        addOrderByColumn(columns, "tr.transaction_date", "transaction_date", "transactiondate");
+        addOrderByColumn(columns, "tr.transaction_type_enum", "transaction_type_enum", "transactiontype");
+        addOrderByColumn(columns, "tr.amount", "amount", "transactionamount");
+        addOrderByColumn(columns, "tr.is_reversed", "is_reversed", "reversed");
+        addOrderByColumn(columns, "tr.created_date", "created_date");
+        return Map.copyOf(columns);
+    }
+
+    private static void addOrderByColumn(final Map<String, String> columns, final String column, final String... aliases) {
+        columns.put(column, column);
+        for (String alias : aliases) {
+            columns.put(alias, column);
+        }
+    }
+
+    static String resolveOrderByColumn(final String orderBy) {
+        final String column = ORDER_BY_COLUMNS.get(orderBy.trim().toLowerCase(Locale.ROOT));
+        if (column == null) {
+            throw new PlatformApiDataValidationException("validation.msg.invalid.orderBy", "Invalid orderBy value: " + orderBy, "orderBy",
+                    orderBy);
+        }
+        return column;
+    }
+
+    static String resolveSortOrder(final String sortOrder) {
+        final String direction = sortOrder.trim().toUpperCase(Locale.ROOT);
+        if (!ALLOWED_SORT_ORDERS.contains(direction)) {
+            throw new PlatformApiDataValidationException("validation.msg.invalid.sortOrder", "Invalid sortOrder value: " + sortOrder,
+                    "sortOrder", sortOrder);
+        }
+        return direction;
     }
 
     private static final class DepositAccountOnHoldTransactionsMapper implements RowMapper<DepositAccountOnHoldTransactionData> {
